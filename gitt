@@ -1,0 +1,40 @@
+#!/bin/bash
+
+
+script_dir=$(cd "$(dirname "$0")" && pwd)
+
+source "$script_dir/initgitt.sh"
+source "$script_dir/utils.sh"
+# source "$script_dir/rungitt.sh"
+
+action="$1" 
+cmd="$@"
+echo  "debug: cmd1 $action | cmd $@"
+# 根据用户输入的命令进行判断和执行
+case "$action" in
+    "init")
+        gitt_init 
+        ;;
+    "start")
+        echo "running..."
+        gitt_run 
+        ;;
+    "stop")
+        gitt_stop 
+        ;;
+    "run")
+        shift 1
+        echo "CMD: [git $@]"
+        git --git-dir .gitback $@
+        ;;
+    "status")
+        gitt_status
+        ;;
+    "back")
+        alias gitback='gitt run'
+        echo "USE cmd: [gitback ...]"
+        ;;
+    *)
+        echo "Unknown command: $action"
+        ;;
+esac
